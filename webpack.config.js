@@ -1,4 +1,3 @@
-const path = require("path")
 const MODE = "development"
 const enabledSourceMap = MODE === "development"
 const HtmlWebpackPlugin = require("html-webpack-plugin")
@@ -15,7 +14,7 @@ module.exports = {
 	},
 	output: {
 		clean: true,
-		path: `${__dirname}`,
+		path: `${__dirname}/dist`,
 		filename: "./js/[name]",
 		assetModuleFilename: "./img/[name]"
 	},
@@ -33,14 +32,11 @@ module.exports = {
 				use: [
 					{
 						loader: MiniCssExtractPlugin.loader,
-						options: {
-							publicPath: "./dist/"
-						}
 					},
 					{
 						loader: "css-loader",
 						options: {
-							url: true,
+							url: false,
 							sourceMap: enabledSourceMap,
 							importLoaders: 2,
 						},
@@ -77,10 +73,10 @@ module.exports = {
 				test: /\.html$/i,
 				loader: "html-loader",
 			},
-			// {
-			// 	test: /\.css$/i,
-			// 	use: [MiniCssExtractPlugin.loader, "css-loader"]
-			// }
+			{
+				test: /\.css$/i,
+				use: [MiniCssExtractPlugin.loader, "css-loader"]
+			}
 		],
 	},
 	plugins: [
