@@ -1,30 +1,33 @@
 const MODE = "development"
 const enabledSourceMap = MODE === "development"
 const HtmlWebpackPlugin = require("html-webpack-plugin")
-const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin')
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const autoprefixer = require("autoprefixer");
+const HtmlWebpackHarddiskPlugin = require("html-webpack-harddisk-plugin")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const autoprefixer = require("autoprefixer")
 
 module.exports = {
 	mode: MODE,
-	devtool: false,
+	target: ["web", "es5"],
+	devtool: 'inline-source-map',
+	devServer: {
+		static: "./dist/",
+		open: true,
+	},
 	entry: {
-		"app.js": `/src/js/app.js`,
-		"app.css": `/src/sass/app.sass`
+		app: `./src/js/app.js`,
 	},
 	output: {
 		clean: true,
-		path: `${__dirname}/dist`,
-		filename: "./js/[name]",
-		assetModuleFilename: "./img/[name]"
+		path: `${__dirname}/dist/`,
+		filename: "./js/[name].js",
 	},
 	module: {
 		rules: [
 			{
 				test: /\.(jpe?g|png|gif|svg)$/i,
-				type: 'asset/resource',
+				type: "asset/resource",
 				generator: {
-					filename: "./img/[name][ext]"
+					filename: "./img/[name][ext]",
 				},
 			},
 			{
@@ -33,10 +36,11 @@ module.exports = {
 					{
 						loader: MiniCssExtractPlugin.loader,
 					},
+					// {loader: "style-loader"},
 					{
 						loader: "css-loader",
 						options: {
-							url: false,
+							url: true,
 							sourceMap: enabledSourceMap,
 							importLoaders: 2,
 						},
@@ -48,11 +52,11 @@ module.exports = {
 								plugins: [
 									autoprefixer({
 										grid: true,
-										flexbox: true
-									})
-								]
-							}
-						}
+										flexbox: true,
+									}),
+								],
+							},
+						},
 					},
 					{
 						loader: "sass-loader",
@@ -75,23 +79,25 @@ module.exports = {
 			},
 			{
 				test: /\.css$/i,
-				use: [MiniCssExtractPlugin.loader, "css-loader"]
-			}
+				use: [
+					{
+						loader: MiniCssExtractPlugin.loader,
+					},
+					{
+						loader: "css-loader"
+					},
+				],
+			},
 		],
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
 			template: "./src/index.html",
-			alwaysWriteToDisk: true
+			alwaysWriteToDisk: true,
 		}),
 		new HtmlWebpackHarddiskPlugin(),
 		new MiniCssExtractPlugin({
-			filename: "./css/[name]"
-		})
+			filename: "./css/[name].css",
+		}),
 	],
-	target: ["web", "es5"],
-	devServer: {
-		static: "./dist/",
-		open: true,
-	},
-};
+}
