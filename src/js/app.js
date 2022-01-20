@@ -1,2 +1,2 @@
 import $ from "jquery"
-$("body").append("<p>test</p>")
+import sass from "../sass/app.sass"
