@@ -1,12 +1,17 @@
-const { merge } = require('webpack-merge')
-const common = require('./webpack.common')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const autoprefixer = require('autoprefixer')
-const TerserPlugin = require('terser-webpack-plugin')
-const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin')
+const { merge } = require("webpack-merge")
+const common = require("./webpack.common")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const autoprefixer = require("autoprefixer")
+const TerserPlugin = require("terser-webpack-plugin")
+const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin")
 
 module.exports = merge(common, {
-	mode: 'production',
+	mode: "production",
+	output: {
+		clean: true,
+		path: `${__dirname}/dist/`,
+		filename: "./js/[name].[contenthash].js",
+	},
 	optimization: {
 		minimize: true,
 		minimizer: [
@@ -14,6 +19,9 @@ module.exports = merge(common, {
 				terserOptions: {
 					format: {
 						comments: false,
+					},
+					compress: {
+						drop_console: true,
 					},
 				},
 				extractComments: false,
@@ -23,7 +31,7 @@ module.exports = merge(common, {
 				minimizer: {
 					implementation: ImageMinimizerPlugin.imageminMinify,
 					options: {
-						plugins: [['gifsicle', {}]],
+						plugins: [["gifsicle", {}]],
 					},
 				},
 			}),
@@ -40,9 +48,9 @@ module.exports = merge(common, {
 		rules: [
 			{
 				test: /\.(jpe?g|png|gif|svg)$/i,
-				type: 'asset/resource',
+				type: "asset/resource",
 				generator: {
-					filename: './img/[name].[contenthash][ext]',
+					filename: "./img/[name].[contenthash][ext]",
 				},
 			},
 			{
@@ -52,7 +60,7 @@ module.exports = merge(common, {
 						loader: MiniCssExtractPlugin.loader,
 					},
 					{
-						loader: 'css-loader',
+						loader: "css-loader",
 						options: {
 							url: true,
 							sourceMap: false,
@@ -60,7 +68,7 @@ module.exports = merge(common, {
 						},
 					},
 					{
-						loader: 'postcss-loader',
+						loader: "postcss-loader",
 						options: {
 							postcssOptions: {
 								plugins: [
@@ -73,7 +81,7 @@ module.exports = merge(common, {
 						},
 					},
 					{
-						loader: 'sass-loader',
+						loader: "sass-loader",
 						options: {
 							sourceMap: false,
 						},
@@ -82,14 +90,14 @@ module.exports = merge(common, {
 			},
 			{
 				test: /\.js$/i,
-				loader: 'babel-loader',
+				loader: "babel-loader",
 				options: {
-					presets: ['@babel/preset-env'],
+					presets: ["@babel/preset-env"],
 				},
 			},
 			{
 				test: /\.html$/i,
-				loader: 'html-loader',
+				loader: "html-loader",
 			},
 			{
 				test: /\.css$/i,
@@ -98,10 +106,22 @@ module.exports = merge(common, {
 						loader: MiniCssExtractPlugin.loader,
 					},
 					{
-						loader: 'css-loader',
+						loader: "css-loader",
 					},
 				],
 			},
+			{
+				test: /\.pug$/i,
+				loader: "pug-loader",
+				options: {
+					pretty: false,
+				},
+			},
 		],
 	},
+	plugins: [
+		new MiniCssExtractPlugin({
+			filename: "./css/[name].[contenthash].css",
+		}),
+	],
 })
