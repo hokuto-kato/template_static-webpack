@@ -1,9 +1,11 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const HtmlWebpackHarddiskPlugin = require("html-webpack-harddisk-plugin")
+const SVGSpritemapPlugin = require("svg-spritemap-webpack-plugin")
 const globule = require("globule")
 const pug = globule.find("./src/pug/*.pug", {
 	ignore: ["./src/pug/include/*.pug"],
 })
+const svg = globule.find("./src/svg/*.svg").length
 
 const app = {
 	target: ["web", "es6"],
@@ -29,7 +31,6 @@ const app = {
 	],
 }
 
-//pugファイルがある分だけhtmlに変換する
 pug.forEach((template) => {
 	const fileName = template.replace("./src/pug/", "").replace(".pug", ".html")
 	app.plugins.push(
@@ -42,5 +43,24 @@ pug.forEach((template) => {
 		}),
 	)
 })
+
+if (svg){
+	app.plugins.push(
+		new SVGSpritemapPlugin(`./src/img/*.svg`, {
+			output: {
+				filename: "./img/sprite.svg",
+			},
+			sprite: {
+				prefix: false,
+				generate: {
+					use: true,
+					symbol: true,
+					title: false,
+				},
+			},
+			styles: `src/sass/sprite.scss`,
+		}),
+	)
+}
 
 module.exports = app
