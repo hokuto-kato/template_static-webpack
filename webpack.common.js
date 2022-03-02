@@ -5,7 +5,7 @@ const globule = require("globule")
 const pug = globule.find("./src/pug/*.pug", {
 	ignore: ["./src/pug/include/*.pug"],
 })
-const svg = globule.find("./src/svg/*.svg").length
+const svg = globule.find("./src/img/*.svg").length
 
 const app = {
 	target: ["web", "es6"],
