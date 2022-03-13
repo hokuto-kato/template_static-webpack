@@ -1,4 +1,4 @@
-const { merge } = require("webpack-merge")
+const {merge} = require("webpack-merge")
 const common = require("./webpack.common")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const autoprefixer = require("autoprefixer")
@@ -28,10 +28,24 @@ module.exports = merge(common, {
 	module: {
 		rules: [
 			{
-				test: /\.(jpe?g|png|gif|svg)$/i,
+				test: /\.(jpe?g|png|gif|svg|webp)$/i,
 				type: "asset/resource",
 				generator: {
 					filename: "./img/[name][ext]",
+				},
+			},
+			{
+				test: /\.(mp4|webm)$/i,
+				type: "asset/resource",
+				generator: {
+					filename: "./mov/[name][ext]",
+				},
+			},
+			{
+				test: /\.(json)$/i,
+				type: "asset/resource",
+				generator: {
+					filename: "./data/[name][ext]",
 				},
 			},
 			{
@@ -94,9 +108,6 @@ module.exports = merge(common, {
 			{
 				test: /\.pug$/i,
 				loader: "pug-loader",
-				options: {
-					pretty: true,
-				},
 			},
 		],
 	},

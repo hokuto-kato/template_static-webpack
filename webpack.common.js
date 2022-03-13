@@ -18,7 +18,7 @@ const app = {
 		app: `./src/js/app.js`,
 	},
 	resolve: {
-		extensions: [".js", ".json", ".scss", ".css", ".pug", ".html"],
+		extensions: [".js", ".json", ".scss", ".sass", ".css", ".pug", ".html"],
 		alias: {
 			"~": `${__dirname}/src`,
 		},
@@ -39,12 +39,12 @@ pug.forEach((template) => {
 			template: template,
 			inject: true,
 			alwaysWriteToDisk: true,
-			favicon: `./src/favicon/favicon.ico`
+			favicon: `./src/favicon/favicon.ico`,
 		}),
 	)
 })
 
-if (svg){
+if (svg) {
 	app.plugins.push(
 		new SVGSpritemapPlugin(`./src/img/*.svg`, {
 			output: {
