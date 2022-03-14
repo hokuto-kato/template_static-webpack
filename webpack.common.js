@@ -49,6 +49,7 @@ if (svg) {
 		new SVGSpritemapPlugin(`./src/img/*.svg`, {
 			output: {
 				filename: "./img/sprite.svg",
+				svgo: false,
 			},
 			sprite: {
 				prefix: false,
@@ -58,7 +59,10 @@ if (svg) {
 					title: false,
 				},
 			},
-			styles: `src/sass/sprite.scss`,
+			styles: {
+				filename: "src/sass/sprite.scss",
+				keepAttributes: true,
+			}
 		}),
 	)
 }
